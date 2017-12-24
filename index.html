@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width" ;
+          initial-scale="1.0; maximum-scale=1.0; user-scalable=0;">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="body_wrapper">
+    <div id="context_column1">
+        Division One
+    </div>
+    <div id='context_column2'>
+        Division Two
+        <div id="bchart">bar-chart
+            <canvas id="bar-chart"></canvas>
+        </div>
+        <div id="bchart-h">bar-chart-horizontal
+        <canvas id="bar-chart-horizontal"></canvas>
+        </div>
+        <div id="bchart-g">bar-chart-grouped
+            <canvas id="bar-chart-grouped"></canvas>
+        </div>
+        <div id="mixchart">mixed-chart
+        <canvas id="mixed-chart"></canvas>
+        </div>
+        <div id="lchart">line-chart
+            <canvas id="line-chart"></canvas>
+        </div>
+        <div id="pchart">pie-chart
+            <canvas id="pie-chart"></canvas>
+        </div>
+        <div id="polarChart">polar-chart
+            <canvas id="polar-chart"></canvas>
+        </div>
+        <div id="doChart">doughnut-chart
+            <canvas id="doughnut-chart"></canvas>
+        </div>
+        <div id="radChart">radar-chart
+            <canvas id="radar-chart"></canvas>
+        </div>
+        <div id="bbchart">bubble-chart
+            <canvas id="bubble-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="bar-select">
+    <a style="display: inline-block" href="#bchart">  bar-chart           </a>
+    <a style="display: inline-block" href="#bchart-h">bar-chart-horizontal</a>
+    <a style="display: inline-block" href="#bchart-g">bar-chart-grouped</a>
+    <a style="display: inline-block" href="#mixchart">mixed-chart</a>
+    <a style="display: inline-block" href="#lchart">line-chart</a>
+    <a style="display: inline-block" href="#pchart">pie-chart</a>
+    <a style="display: inline-block" href="#bbchart">bubble-chart</a>
+</div>
+<div class="nav_wrapper">
+    <div id='mySidenavOpen' style="font-size:30px;cursor:pointer" onclick="openNav()">&#8801;</div>
+    <div id="appname">Personal Expenditure Manager</div>
+</div>
+<nav id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a class="side_cat"></a>
+    <a href="#">Update</a>
+    <a class="side_cat">Analysis</a>
+    <a href="#">Today</a>
+    <a href="#">Week</a>
+    <a href="#">Month</a>
+    <a href="#">Contact</a>
+</nav>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
