@@ -5,7 +5,11 @@
 }
 
 body *{
+<<<<<<< HEAD
   border: solid;
+=======
+  //border: solid;
+>>>>>>> c0d32f7e53768e66eb0f109f1d680aa5335523d4
 }
 /* The side navigation menu */
 .sidenav {
