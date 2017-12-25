@@ -1,0 +1,109 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body *{
+  border: solid;
+}
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+.bar-select {
+    position:fixed;
+    width: 20%;
+    top:50px;
+    left:5px;
+    height: 100%
+}
+.bar-select a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: inline-block;
+    width: 100%;
+}
+.bar-select a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position:relative;
+    top: 0;
+    right: 1px;
+    font-size: 36px;
+    margin-left: 50px;
+    padding-right: 0;
+}
+
+
+
+.nav_wrapper{
+    position: fixed;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+    font-size: x-large;
+    top:0;
+    background-color: #1c1f2b;
+    color: white;
+}
+.body_wrapper{
+  position: absolute;
+  display: grid;
+  grid-area: content;
+  grid-template-columns: 20% 80%;
+  font-size: x-large;
+  width: 100%;
+  top: 50px;
+}
+.body_wrapper  div{
+    padding-top: 20%;
+    padding-bottom: 20%;
+}
+#context_column1{
+    background-color: black; /* Black*/
+}
+#appname {
+    text-align: right;
+    padding-right: 1em;
+    padding-top: 3px;
+}
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
