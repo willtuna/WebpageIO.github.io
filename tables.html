@@ -758,6 +758,9 @@
                     return false;
                 }
             });
+            $('#FORMSUBMIT').on('click',function () {
+                $('#addBillFormID').submit();
+            });
         });
     </script>
 </div>
@@ -765,6 +768,7 @@
 <div class="modal fade " id="addBill" tabindex="-1" role="dialog" aria-labelledby="addBillLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <form method="post" action="/addBill" id="addBillFormID">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addBillLabel">新增帳目</h5>
                     <!-- close botton -->
@@ -773,7 +777,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/update_data.js">
                     <!-- datepicker -->
                     <div class="row">
                         <div class="col">
@@ -819,11 +822,11 @@
                             <input class="form-control"  type="text" name="item_name" id="item_name"/>
                         </div>
                     </div>
-                    </form>
                 </div>
+            </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+                <button type="submit" class="btn btn-default" data-dismiss="modal" id="FORMSUBMIT">Submit</button>
             </div>
         </div>
     </div>

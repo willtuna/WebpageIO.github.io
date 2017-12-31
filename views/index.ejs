@@ -1,0 +1,16 @@
+<% include partials/header %>
+
+    <tbody>
+        <% table.forEach(function (data) {  %>
+        <tr>
+            <td> <%= data.maincategory%></td>
+            <td> <%= data.seccategory%></td>
+            <td> <%= data.thirdcategory%></td>
+            <td> <%= data.item_name%></td>
+            <td> <%= data.date %></td>
+            <td> $ <%= data.price%></td>
+        </tr>
+        <%   })%>
+    </tbody>
+<% include partials/footer %>
+

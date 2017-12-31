@@ -1,49 +1,47 @@
 {
-    "title": "SB Admin",
-    "name": "startbootstrap-sb-admin",
-    "version": "4.0.0-beta.2",
-    "description": "A one page app landing page HTML theme for Bootstrap.",
-    "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template",
-        "admin",
-        "app"
-    ],
-    "homepage": "https://startbootstrap.com/template-overviews/sb-admin",
-    "bugs": {
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin/issues",
-        "email": "feedback@startbootstrap.com"
-    },
-    "license": "MIT",
-    "author": "Start Bootstrap",
-    "contributors": [
-        "David Miller (http://davidmiller.io/)"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin.git"
-    },
-    "dependencies": {
-        "bootstrap": "^4.0.0-beta.2",
-        "chart.js": "2.7.0",
-        "datatables.net-bs4": "1.10.16",
-        "font-awesome": "4.7.0",
-        "jquery": "^3.2.1",
-        "jquery.easing": "^1.4.1"
-    },
-    "devDependencies": {
-        "browser-sync": "2.18.13",
-        "gulp": "^3.9.1",
-        "gulp-clean-css": "3.9.0",
-        "gulp-header": "1.8.9",
-        "gulp-html-beautify": "^1.0.1",
-        "gulp-pug": "^3.3.0",
-        "gulp-rename": "^1.2.2",
-        "gulp-sass": "^3.1.0",
-        "gulp-uglify": "3.0.0"
-    }
+  "title": "AccountManager",
+  "name": "webdesign_finalproject",
+  "version": "1.0.0",
+  "description": "A one page app landing page HTML theme for Bootstrap.",
+  "keywords": [
+    "css",
+    "sass",
+    "html",
+    "responsive",
+    "theme",
+    "template",
+    "admin",
+    "app"
+  ],
+  "homepage": "",
+  "bugs": {
+    "url": "",
+    "email": "willvegapunk.ee03@g2.nctu.edu.tw"
+  },
+  "license": "MIT",
+  "author": "Willvegapunk",
+  "contributors": [
+    "Will Vegapunk"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "bootstrap": "^4.0.0-beta.2",
+    "chart.js": "2.7.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "font-awesome": "4.7.0",
+    "jquery": "^3.2.1",
+    "jquery.easing": "^1.4.1",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {},
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
