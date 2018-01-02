@@ -2,24 +2,22 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>記帳小管家</title>
-    <!-- Bootstrap core CSS-->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin.css" rel="stylesheet">
-    <link href="css/table.css" rel="stylesheet">
-    <link href="vendor/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>記帳小管家</title>
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<!-- Navigation-->
+  <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="index.html">記帳小管家</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -141,51 +139,70 @@
         </ul>
     </div>
 </nav>
-
-<div class="content-wrapper">
+  <div class="content-wrapper">
     <div class="container-fluid">
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="index.html">Brief Report</a>
-            </li>
-            <li class="breadcrumb-item active">Tables</li>
-        </ol>
-        <!-- Example DataTables Card-->
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Charts</li>
+      </ol>
+      <!-- Area Chart Example-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-area-chart"></i> 直線圖 </div>
+        <div class="card-body">
+          <canvas id="dailyLineChart" width="100%" height="30"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
         <div class="card mb-3">
-            <!-- Button trigger modal -->
-            <!-- Button trigger modal -->
-
-
-            <div class="card-header " style="font-size: 1.5rem">
-                <i class="fa fa-table"></i>
-                帳目表單
-                <button type="button" class="btn btn-primary btn-sm btn-circle float-right" data-toggle="modal"
-                        data-target="#addBill" style="cursor: pointer;">
-                    <span>&plus;</span>
-                </button>
-                <span class="float-right" style="margin-right: 1rem">新增</span>
-            </div>
+            <div class="card-header">
+                <i class="fa fa-area-chart"></i> 圓餅圖 </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th>收入/支出</th>
-                            <th>類別</th>
-                            <th>子類別</th>
-                            <th>品名</th>
-                            <th>日期</th>
-                            <th>金額</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>收入/支出</th>
-                            <th>類別</th>
-                            <th>子類別</th>
-                            <th>品名</th>
-                            <th>日期</th>
-                            <th>金額</th>
-                        </tr>
-                        </tfoot>
+                <canvas id="dailypieChart" width="100%" height="30"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+    <!-- Custom scripts for this page-->
+      <script src="js/Daily.js"></script>
+  </div>
+</body>
+
+</html>

@@ -57,12 +57,14 @@ app.use(bodyparser.urlencoded({extended:false}));
 app.use('/vendor',express.static(__dirname+'/vendor'));
 app.use('/js',express.static(__dirname+'/js'));
 app.use('/css',express.static(__dirname+'/css'));
-app.use('/',express.static(__dirname+'/'));
 // route handler
 
 app.get('/',function (req,res) {
-    res.sendFile(__dirname+'/index.html');
+    //res.sendFile(__dirname+'/index.html');
+    res.sendFile(__dirname+'/login.html');
 });
+app.use('/',express.static(__dirname+'/'));
+
 
 app.get('/table',function (req,res) {
     get_all_table(req,res)
@@ -84,14 +86,19 @@ var income  = ['錯誤','固定收入','非固定收入']
 var outcome = ['錯誤','飲食', '交通', '娛樂','帳單','醫療','日用','其他']
 var eat     = ['錯誤','飲料','正餐','點心(宵夜)']
 var transport = ['錯誤','高鐵','捷運','公車','客運','加油']
+var tmpdate;
+
+function dateconvert(date) {
+    var f_date;
+    f_date = date.split('/');
+    return f_date [2] + '-' + f_date[0] + '-' + f_date[1];
+}
 
 
 //*************** post handler for FORM *******************
 app.post('/addBill', function (req,res) {
     console.log('FORM SUBMITTED');
-        var tmpdate =req.body.date;
-        tmpdate = tmpdate.split('/');
-        tmpdate = tmpdate[2] + '-' + tmpdate[0] + '-' + tmpdate[1];
+    tmpdate = dateconvert(req.body.date);
 
     var newBill={
         date:tmpdate,
@@ -146,4 +153,48 @@ app.get('/getTable', function (req,res) {
 
 app.listen(8000,function () {
     console.log('Server Starting on port 8000...');
+});
+
+
+app.get('/getDaily', function (req,res) {
+    var start_date = req.body.dateStart;
+    var end_date   = req.body.dateEnd;
+    var i;
+    //   start_date = '2015-01-01';
+    //  end_date = '2015-05-01';
+    if( (start_date == undefined) || (end_date == undefined)) {
+        console.log('IN DEFAULT DAILY');
+        sql = ' SELECT * FROM rawData ORDER BY ID DESC LIMIT 7 ' ;
+        query = db.query(sql, function(err,rows,fields){
+            if(err) throw err;
+            var date_arr = [], price_arr = [];
+            var i;
+            for(i=0 ; i < rows.length ; i++){
+                date_arr.push(rows[i].date);
+                price_arr.push(rows[i].price);
+            }
+
+            res.json( {date:date_arr,price:price_arr} );
+
+        })
+    }
+    else {
+        console.log('FETCH FROM',start_date,'TO',end_date);
+        sql =
+            " SELECT * FROM `rawData` WHERE date >=  '" + start_date + "' AND date <= '" +
+            end_date +"'";
+
+        query = db.query(sql, function(err,rows,fields){
+            if(err) throw err;
+            var date_arr = [], price_arr = [];
+            var i;
+            for(i=0 ; i < rows.length ; i++){
+                date_arr.push(rows[i].date);
+                price_arr.push(rows[i].price);
+            }
+
+            res.json( {date:date_arr,price:price_arr} );
+
+        })
+    }
 });
