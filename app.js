@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyparser = require('body-parser');
 var path = require('path');
+var cookieParser = require('cookie-parser');
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
@@ -36,6 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 // body-parser middle ware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: false}));
+app.use(cookieParser());
 
 
 //*********   set static path for css js vendor folder ***********
@@ -51,41 +53,12 @@ app.use('/css', express.static(__dirname + '/css'));
 // route handler
 
 app.get('/', function (req, res) {
-    //res.sendFile(__dirname+'/index.html');
+    res.clearCookie('name');
     res.sendFile(__dirname + '/login.html');
 });
+
 app.use('/', express.static(__dirname + '/'));
 
-
-app.get('/table', function (req, res) {
-    get_all_table(req, res)
-});
-
-//*********  GLOBAL VARIABLE ********************
-var sql, query, post;
-
-function get_all_table(req, res) {
-    sql = 'SELECT * FROM rawData ORDER BY ID DESC LIMIT 10';
-    query = db.query(sql, function (err, result) {
-        if (err) throw err;
-        res.render('index', {
-            table: result
-        });
-    })
-}
-
-var in_out = ['錯誤', '收入', '支出'];
-var income = ['錯誤', '固定收入', '非固定收入'];
-var outcome = ['錯誤', '飲食', '交通', '娛樂', '帳單', '醫療', '日用', '其他'];
-var eat = ['錯誤', '飲料', '正餐', '點心(宵夜)'];
-var transport = ['錯誤', '高鐵', '捷運', '公車', '客運', '加油'];
-var tmpdate;
-
-function dateconvert(date) {
-    var f_date;
-    f_date = date.split('/');
-    return f_date [2] + '-' + f_date[0] + '-' + f_date[1];
-}
 app.post('/after_regist', function(req, res) {
     console.log('hello');
     var check = false;
@@ -108,37 +81,37 @@ app.post('/after_regist', function(req, res) {
         //console.log(result);
         //console.log(result.length);
         if (result.length !== 0)
-          check = true;
+            check = true;
         console.log("check!!!"+check);
         if (!check){
-          var User={
-              account:account,
-              password:password,
-              email:email,
-              first:first,
-              last:last
-          };
-          // if unique insert account info into User table
-          sql = "INSERT INTO User SET ?";
-          query = db.query(sql, User, function (err,result) {
-              if(err) throw  err;
-              console.log(err);
-              create_todo_sql = "CREATE TABLE {{query}}todo (           \
+            var User={
+                account:account,
+                password:password,
+                email:email,
+                first:first,
+                last:last
+            };
+            // if unique insert account info into User table
+            sql = "INSERT INTO User SET ?";
+            query = db.query(sql, User, function (err,result) {
+                if(err) throw  err;
+                console.log(err);
+                create_todo_sql = "CREATE TABLE {{query}}todo (           \
                           Year int(255) NOT NULL,                       \
                           month int(255) NOT NULL,                      \
                           day int(255) NOT NULL,                        \
                           dolist text NOT NULL,                         \
                           color VARCHAR(100) NOT NULL                   \
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-              create_todo_sql = create_todo_sql.replace("{{query}}",account);
-              todo_query = db.query(create_todo_sql, function(err, result_2) {
-                if(err)
-                  throw err;
-                else
-                  console.log("Create todo table "+account+" successful!");
-              });
-              //get_all_table(req,res);
-              create_record_sql = "CREATE TABLE {{query}}record (       \
+                create_todo_sql = create_todo_sql.replace("{{query}}",account);
+                todo_query = db.query(create_todo_sql, function(err, result_2) {
+                    if(err)
+                        throw err;
+                    else
+                        console.log("Create todo table "+account+" successful!");
+                });
+                //get_all_table(req,res);
+                create_record_sql = "CREATE TABLE {{query}}record (       \
                           maincategory text NOT NULL,                   \
                           seccategory text NOT NULL,                    \
                           thirdcategory text NOT NULL,                  \
@@ -148,22 +121,22 @@ app.post('/after_regist', function(req, res) {
                           ID int(255) unsigned NOT NULL AUTO_INCREMENT, \
                           PRIMARY KEY (ID)                              \
                         ) ENGINE=InnoDB AUTO_INCREMENT=378 DEFAULT CHARSET=utf8";
-              create_record_sql = create_record_sql.replace("{{query}}",account);
-              record_query = db.query(create_record_sql, function(err, result) {
-                if(err)
-                  throw err;
-                else
-                  console.log("Create record table "+account+" successful!");
-              });
+                create_record_sql = create_record_sql.replace("{{query}}",account);
+                record_query = db.query(create_record_sql, function(err, result) {
+                    if(err)
+                        throw err;
+                    else
+                        console.log("Create record table "+account+" successful!");
+                });
             });
-          res.sendFile(__dirname+'/login.html');
+            res.sendFile(__dirname+'/login.html');
         } else {
-          res.sendFile(__dirname+'/register.html');
+            res.sendFile(__dirname+'/register.html');
         }
-      });
-  });
-  
-  app.post('/after_login', function(req, res) {
+    });
+});
+
+app.post('/after_login', function(req, res) {
     var check = false;
     var temp = req.body.email;
     var password = req.body.password;
@@ -175,27 +148,91 @@ app.post('/after_regist', function(req, res) {
     sql = "SELECT * FROM User WHERE account = '{{account}}' AND password = '{{password}}' AND email = '{{email}}'";
     sql = sql.replace("{{account}}",account).replace("{{password}}",password).replace("{{email}}",email);
     query = db.query(sql, function(err, result) {
-      if (err)
-        throw err;
-      else{
-        // fail
-        if (result.length === 0){
-          //res.cookie('name', 'express').send('cookie set');
-          //console.log('Cookies: ', req.cookies);
-          res.sendFile(__dirname+'/login.html');
-          //res.send('Hello World!');
+        if (err)
+            throw err;
+        else{
+            // fail
+            if (result.length === 0){
+                //res.cookie('name', 'express').send('cookie set');
+                //console.log('Cookies: ', req.cookies);
+                res.sendFile(__dirname+'/login.html');
+                //res.send('Hello World!');
+            }
+            // correct !
+            else {
+                res.cookie('name', account);
+                res.sendFile(__dirname+'/index.html');
+            }
         }
-        // correct !
-        else {
-          res.sendFile(__dirname+'/index.html');
-        }
-      }
     });
-  
-  });
 
-//*************** post handler for FORM *******************
+});
+
+
+var cookie_checker = function (req,res,next) {
+    var account = req.cookies.name;
+    console.log("cookiecheck: account name = " + account);
+    sql = "SELECT * FROM User WHERE account = '{{account}}'";
+    sql = sql.replace("{{account}}",account);
+    console.log(sql);
+    query = db.query(sql, function(err, result) {
+        if (err)
+            throw err;
+        else{
+            // fail
+            if (result.length === 0){
+                res.status(403);
+                res.render("error",{error:err});
+            }
+            // correct !
+            else {
+                console.log("check pass!");
+                next();
+            }
+        }
+    });
+};
+
+
+app.use(cookie_checker);
+
+
+app.get('/table', function (req, res) {
+    console.log(req.cookies.name);
+    get_all_table(req, res)
+});
+
+//*********  GLOBAL VARIABLE ********************
+var sql, query, post;
+
+function get_all_table(req, res) {
+    var table = req.cookies.name + 'record';
+    sql = 'SELECT * FROM ' + table +' ORDER BY ID DESC LIMIT 10';
+    query = db.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log(result);
+        res.render('index', {
+            table: result
+        });
+    })
+}
+
+var in_out = ['錯誤', '收入', '支出'];
+var income = ['錯誤', '固定收入', '非固定收入'];
+var outcome = ['錯誤', '飲食', '交通', '娛樂', '帳單', '醫療', '日用', '其他'];
+var eat = ['錯誤', '飲料', '正餐', '點心(宵夜)'];
+var transport = ['錯誤', '高鐵', '捷運', '公車', '客運', '加油'];
+var tmpdate;
+
+function dateconvert(date) {
+    var f_date;
+    f_date = date.split('/');
+    return f_date [2] + '-' + f_date[0] + '-' + f_date[1];
+}
+
 app.post('/addBill', function (req, res) {
+    var table = req.cookies.name + "record";
+
     console.log('FORM SUBMITTED');
     tmpdate = dateconvert(req.body.date);
 
@@ -232,7 +269,7 @@ app.post('/addBill', function (req, res) {
     }
 
     post = newBill;
-    sql = 'INSERT INTO rawData SET ?';
+    sql = 'INSERT INTO '+table+' SET ?';
     query = db.query(sql, post, function (err) {
         if (err) throw  err;
         get_all_table(req, res);
@@ -240,9 +277,12 @@ app.post('/addBill', function (req, res) {
 });
 
 
+
 app.get('/getTable', function (req, res) {
-    sql = 'SELECT * FROM rawData';
+    var table = req.cookies.name + 'record';
+    sql = 'SELECT * FROM '+ table;
     query = db.query(sql, function (err, result) {
+        console.log(result);
         if (err) throw err;
         res.render('index', {
             table: result
@@ -253,6 +293,7 @@ app.get('/getTable', function (req, res) {
 
 
 app.all('/getRecent', function (req, res) {
+    var table = req.cookies.name + 'record';
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
@@ -268,14 +309,17 @@ app.all('/getRecent', function (req, res) {
         mm = '0' + mm;
     }
 
-    sql = ' SELECT * FROM rawData WHERE maincategory = "支出" AND date >= "' +
+
+    sql = ' SELECT * FROM '+table+' WHERE maincategory = "支出" AND date >= "' +
         yyyy+'-'+mm+'-'+'01'+
         '" AND date <= "'+
-        yyyy+'-'+mm+'-'+"31"+ '"' ;
+        yyyy+'-'+mm+'-'+dd+ '"' ;
 
 
     query = db.query(sql, function (err, rows, fields) {
         if (err) throw err;
+        console.log("getRecent");
+        console.log(rows);
         for (var i = rows.length - 1; i >= 0; i--) {
             if (rows[i].maincategory === '支出') {
                 outcome_acc += parseInt(rows[i].price);
@@ -283,37 +327,40 @@ app.all('/getRecent', function (req, res) {
                 price_arr.push(rows[i].price);
             }
         }
-        sql =
-            " SELECT * FROM `rawData` WHERE  date <= '" +
-            yyyy+'-'+mm+'-'+dd + "'";
-        console.log(sql);
-        query = db.query(sql, function (err, rows, fields) {
-            if (err) throw err;
-            balance = 0;
-            for (var i = rows.length - 1; i >= 0; i--) {
-                if (rows[i].maincategory === '支出') {
-                    balance -= parseInt(rows[i].price);
-                }else if(rows[i].maincategory === '收入'){
-                    balance += parseInt(rows[i].price);
-                }
+    });
+    sql = " SELECT * FROM "+table+" WHERE  date <= '" + yyyy+'-'+mm+'-'+dd + "'";
+    console.log(sql);
+    query = db.query(sql, function (err, rows, fields) {
+        if (err) throw err;
+        balance = 0;
+        for (var i = rows.length - 1; i >= 0; i--) {
+            if (rows[i].maincategory === '支出') {
+                balance -= parseInt(rows[i].price);
+            }else if(rows[i].maincategory === '收入'){
+                balance += parseInt(rows[i].price);
             }
-            res.json(
-                {
-                    date: date_arr,
-                    price: price_arr,
-                    outcome_acc:outcome_acc,
-                    balance: balance
-                });
+        }
+        if(price_arr.length === 0){
+            price_arr = [0];
+        }
+        console.log(price_arr);
+        res.json(
+            {
+                date: date_arr,
+                price: price_arr,
+                outcome_acc:outcome_acc,
+                balance: balance
+            });
 
-        });
     });
 });
 app.all('/getDaily', function (req, res) {
+    var table = req.cookies.name + 'record';
     var start_date = req.body.dateStart;
     var end_date = req.body.dateEnd;
     if ((start_date === undefined) || (end_date === undefined)) {
         console.log('IN DEFAULT DAILY');
-        sql = ' SELECT * FROM rawData ORDER BY ID DESC LIMIT 7 ';
+        sql = ' SELECT * FROM '+table+' ORDER BY ID DESC LIMIT 7 ';
         query = db.query(sql, function (err, rows, fields) {
             var date_arr = [], price_arr = [], maincategory_arr = [];
             if (err) throw err;
@@ -333,7 +380,6 @@ app.all('/getDaily', function (req, res) {
                     month_income_price: month_income_price_arr,
                     month_outcome_price: month_outcomme_price_arr
                 });
-
         })
     }
     else {
@@ -359,7 +405,7 @@ app.all('/getDaily', function (req, res) {
             }
 
             sql =
-                " SELECT SUM(PRICE) FROM `rawData` WHERE  maincategory = '收入' AND date LIKE '" +
+                " SELECT SUM(PRICE) FROM "+ table +" WHERE  maincategory = '收入' AND date LIKE '" +
                 start_year.toString() + "-" + tmpmon + "-%'";
 
             month_label_arr.push(start_year.toString() + "-" + tmpmon);
@@ -371,7 +417,7 @@ app.all('/getDaily', function (req, res) {
 
 
             sql =
-                " SELECT SUM(PRICE) FROM `rawData` WHERE  maincategory = '支出' AND date LIKE '" +
+                " SELECT SUM(PRICE) FROM "+table+" WHERE  maincategory = '支出' AND date LIKE '" +
                 start_year.toString() + "-" + tmpmon + "-%'";
 
             query = db.query(sql, function (err, rows, fields) {
@@ -387,9 +433,7 @@ app.all('/getDaily', function (req, res) {
 
         start_date = start_date[2] + '-' + start_date[0] + '-' + start_date[1];
         end_date = end_date[2] + '-' + end_date[0] + '-' + end_date[1];
-        sql =
-            " SELECT * FROM `rawData` WHERE date >=  '" + start_date + "' AND date <= '" +
-            end_date + "'";
+        sql = " SELECT * FROM " + table + " WHERE date >=  '" + start_date + "' AND date <= '" + end_date + "'";
 
         query = db.query(sql, function (err, rows, fields) {
             if (err) throw err;
@@ -415,6 +459,8 @@ app.all('/getDaily', function (req, res) {
     }
 });
 app.all('/getComponent', function (req, res) {
+    var table = req.cookies.name + 'record';
+    console.log(req.cookies.name);
     //console.log(req);
     if (Object.keys(req.body).length === 0) {
         console.log("NO DATA FETCH");
@@ -428,7 +474,7 @@ app.all('/getComponent', function (req, res) {
         var end_date = req.body.end_year + '-' + req.body.end_month + '-31';
 
         sql =
-            " SELECT * FROM `rawData` WHERE date >=  '" + start_date + "' AND date <= '" +
+            " SELECT * FROM `"+ table + "` WHERE date >=  '" + start_date + "' AND date <= '" +
             end_date + "'";
 
         query = db.query(sql, function (err, rows, fields) {

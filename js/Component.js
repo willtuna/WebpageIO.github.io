@@ -3,7 +3,7 @@ var pie_inout_come = {
     datasets: [{
         label: "Sessions",
         lineTension: .3,
-        backgroundColor: ["#f00f0f", "#0ff00f"],
+        backgroundColor: ["#0ff00f","#f00f0f" ],
         pointRadius: 5,
         pointHoverRadius: 5,
         pointHitRadius: 20,
@@ -76,6 +76,12 @@ var piethirdUpdate = function (obj_label_data) {
 };
 
 $(document).ready(function () {
+    var username = document.cookie.match(/name=.*;?/);
+    username = username[0].split('=')[1];
+    $("#userName").html('<i class="fa fa-user" aria-hidden="true"></i>&nbsp'+username);
+
+
+
     $('#component_modal').modal({show:true});
     console.log("document ready");
     $.ajax({

@@ -1,4 +1,7 @@
 (function($) {
+    var username = document.cookie.match(/name=.*;?/);
+    username = username[0].split('=')[1];
+    $("#userName").html('<i class="fa fa-user" aria-hidden="true"></i>&nbsp'+username);
   "use strict"; // Start of use strict
   // Configure tooltips for collapsed side navigation
   $('.navbar-sidenav [data-toggle="tooltip"]').tooltip({

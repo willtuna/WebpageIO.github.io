@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    console.log("document ready");
+    var username = document.cookie.match(/name=.*;?/);
+    username = username[0].split('=')[1];
+    $("#userName").html('<i class="fa fa-user" aria-hidden="true"></i>&nbsp'+username);
     $('#searchBtn').on('click', function (e) {
         e.preventDefault();
         var serilize_data= $('#tableRangeForm').serializeArray();

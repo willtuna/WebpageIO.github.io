@@ -11,8 +11,6 @@ const db = mysql.createConnection({
     database:'yourdatabase'
 });
 
-
-
 db.connect(function (err) {
     if(err){
         throw err;
@@ -21,15 +19,6 @@ db.connect(function (err) {
 });
 
 var app = express();
-
-/*
-var logger = function (req,res,next) {
-    console.log("Logging");
-    next();
-};
-
-app.use(logger);// Should be before route handler
-*/
 
 // View Engine
 app.set('view engine','ejs');
@@ -61,12 +50,14 @@ app.use('/css',express.static(__dirname+'/css'));
 // route handler
 
 app.get('/',function (req,res) {
+    res.clearCookie('name');
     res.sendFile(__dirname+'/login.html');
     //res.cookie('name', 'express').send('cookie set');
 });
 app.use('/',express.static(__dirname+'/'));
 
 app.get('/table',function (req,res) {
+    console.log(req.cookies.name);
     get_all_table(req,res)
 });
 
@@ -108,8 +99,6 @@ app.post('/after_regist', function(req, res) {
   // first check duplicate account
   check_query = db.query(check_sql, function (err,result) {
       if(err) throw  err;
-      //console.log(result);
-      //console.log(result.length);
       if (result.length !== 0)
         check = true;
       console.log("check!!!"+check);
@@ -140,7 +129,6 @@ app.post('/after_regist', function(req, res) {
               else
                 console.log("Create todo table "+account+" successful!");
             });
-            //get_all_table(req,res);
             create_record_sql = "CREATE TABLE {{query}}record (       \
                         maincategory text NOT NULL,                   \
                         seccategory text NOT NULL,                    \
@@ -181,15 +169,14 @@ app.post('/after_login', function(req, res) {
     if (err)
       throw err;
     else{
-      // fail
+      // fail !
       if (result.length === 0){
-        //res.cookie('name', 'express').send('cookie set');
-        //console.log('Cookies: ', req.cookies);
         res.sendFile(__dirname+'/login.html');
-        //res.send('Hello World!');
       }
       // correct !
       else {
+        // create cookie attribute name, and set its value with account
+        res.cookie('name', account);
         res.sendFile(__dirname+'/index.html');
       }
     }

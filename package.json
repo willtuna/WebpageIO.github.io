@@ -31,6 +31,7 @@
     "body-parser": "*",
     "bootstrap": "^4.0.0-beta.2",
     "chart.js": "2.7.0",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
