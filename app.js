@@ -86,7 +86,113 @@ function dateconvert(date) {
     f_date = date.split('/');
     return f_date [2] + '-' + f_date[0] + '-' + f_date[1];
 }
-
+app.post('/after_regist', function(req, res) {
+    console.log('hello');
+    var check = false;
+    var first = req.body.first_name;
+    var last = req.body.last_name;
+    var temp = req.body.email;
+    var password = req.body.password;
+    temp = temp.split("@");
+    var account = temp[0];
+    var email = temp[1];
+    console.log("account:"+account+" email:"+email);
+    console.log("first:"+first+" last:"+last);
+    console.log("password:"+password);
+    //res.sendFile(__dirname+'/index.html');
+    check_sql = "SELECT account FROM User WHERE account = '{{query}}'"
+    check_sql = check_sql.replace("{{query}}",account);
+    // first check duplicate account
+    check_query = db.query(check_sql, function (err,result) {
+        if(err) throw  err;
+        //console.log(result);
+        //console.log(result.length);
+        if (result.length !== 0)
+          check = true;
+        console.log("check!!!"+check);
+        if (!check){
+          var User={
+              account:account,
+              password:password,
+              email:email,
+              first:first,
+              last:last
+          };
+          // if unique insert account info into User table
+          sql = "INSERT INTO User SET ?";
+          query = db.query(sql, User, function (err,result) {
+              if(err) throw  err;
+              console.log(err);
+              create_todo_sql = "CREATE TABLE {{query}}todo (           \
+                          Year int(255) NOT NULL,                       \
+                          month int(255) NOT NULL,                      \
+                          day int(255) NOT NULL,                        \
+                          dolist text NOT NULL,                         \
+                          color VARCHAR(100) NOT NULL                   \
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+              create_todo_sql = create_todo_sql.replace("{{query}}",account);
+              todo_query = db.query(create_todo_sql, function(err, result_2) {
+                if(err)
+                  throw err;
+                else
+                  console.log("Create todo table "+account+" successful!");
+              });
+              //get_all_table(req,res);
+              create_record_sql = "CREATE TABLE {{query}}record (       \
+                          maincategory text NOT NULL,                   \
+                          seccategory text NOT NULL,                    \
+                          thirdcategory text NOT NULL,                  \
+                          price text NOT NULL,                          \
+                          item_name text NOT NULL,                      \
+                          date text NOT NULL,                           \
+                          ID int(255) unsigned NOT NULL AUTO_INCREMENT, \
+                          PRIMARY KEY (ID)                              \
+                        ) ENGINE=InnoDB AUTO_INCREMENT=378 DEFAULT CHARSET=utf8";
+              create_record_sql = create_record_sql.replace("{{query}}",account);
+              record_query = db.query(create_record_sql, function(err, result) {
+                if(err)
+                  throw err;
+                else
+                  console.log("Create record table "+account+" successful!");
+              });
+            });
+          res.sendFile(__dirname+'/login.html');
+        } else {
+          res.sendFile(__dirname+'/register.html');
+        }
+      });
+  });
+  
+  app.post('/after_login', function(req, res) {
+    var check = false;
+    var temp = req.body.email;
+    var password = req.body.password;
+    temp = temp.split("@");
+    var account = temp[0];
+    var email = temp[1];
+    console.log("account:"+account+" email:"+email);
+    console.log("password:"+password);
+    sql = "SELECT * FROM User WHERE account = '{{account}}' AND password = '{{password}}' AND email = '{{email}}'";
+    sql = sql.replace("{{account}}",account).replace("{{password}}",password).replace("{{email}}",email);
+    query = db.query(sql, function(err, result) {
+      if (err)
+        throw err;
+      else{
+        // fail
+        if (result.length === 0){
+          //res.cookie('name', 'express').send('cookie set');
+          //console.log('Cookies: ', req.cookies);
+          res.sendFile(__dirname+'/login.html');
+          //res.send('Hello World!');
+        }
+        // correct !
+        else {
+          res.sendFile(__dirname+'/index.html');
+        }
+      }
+    });
+  
+  });
 
 //*************** post handler for FORM *******************
 app.post('/addBill', function (req, res) {
@@ -145,12 +251,15 @@ app.get('/getTable', function (req, res) {
 });
 
 
+
 app.all('/getRecent', function (req, res) {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-
+    var balance=0;
+    var outcome_acc = 0;
+    var date_arr = [], price_arr = [];
     if (dd < 10) {
         dd = '0' + dd;
     }
@@ -164,27 +273,39 @@ app.all('/getRecent', function (req, res) {
         '" AND date <= "'+
         yyyy+'-'+mm+'-'+"31"+ '"' ;
 
-    console.log(sql);
 
     query = db.query(sql, function (err, rows, fields) {
-        var date_arr = [], price_arr = [] ;
         if (err) throw err;
-        var outcome_acc = 0;
         for (var i = rows.length - 1; i >= 0; i--) {
-            if(rows[i].maincategory === '支出'){
+            if (rows[i].maincategory === '支出') {
                 outcome_acc += parseInt(rows[i].price);
                 date_arr.push(rows[i].date);
                 price_arr.push(rows[i].price);
             }
         }
+        sql =
+            " SELECT * FROM `rawData` WHERE  date <= '" +
+            yyyy+'-'+mm+'-'+dd + "'";
+        console.log(sql);
+        query = db.query(sql, function (err, rows, fields) {
+            if (err) throw err;
+            balance = 0;
+            for (var i = rows.length - 1; i >= 0; i--) {
+                if (rows[i].maincategory === '支出') {
+                    balance -= parseInt(rows[i].price);
+                }else if(rows[i].maincategory === '收入'){
+                    balance += parseInt(rows[i].price);
+                }
+            }
+            res.json(
+                {
+                    date: date_arr,
+                    price: price_arr,
+                    outcome_acc:outcome_acc,
+                    balance: balance
+                });
 
-        res.json(
-            {
-                date: date_arr,
-                price: price_arr,
-                outcome_acc:outcome_acc
-            });
-
+        });
     });
 });
 app.all('/getDaily', function (req, res) {
@@ -230,7 +351,7 @@ app.all('/getDaily', function (req, res) {
             if (j % 12 < 10 && (j != 12)) {
                 tmpmon = '0' + (j % 12).toString();
             } else {
-                if(j%12==0){
+                if(j%12===0){
                     tmpmon = '12';
                 }else{
                     tmpmon = (j % 12).toString();
@@ -258,7 +379,7 @@ app.all('/getDaily', function (req, res) {
                 month_outcomme_price_arr.push(rows[0]['SUM(PRICE)']);
             });
 
-            if (j % 12 == 0) {
+            if (j % 12 === 0) {
                 start_year++;
             }
         }
@@ -295,7 +416,7 @@ app.all('/getDaily', function (req, res) {
 });
 app.all('/getComponent', function (req, res) {
     //console.log(req);
-    if (Object.keys(req.body).length == 0) {
+    if (Object.keys(req.body).length === 0) {
         console.log("NO DATA FETCH");
     }
     else {

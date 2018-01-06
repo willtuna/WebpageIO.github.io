@@ -16,19 +16,44 @@
   <link href="css/sb-admin.css" rel="stylesheet">
 </head>
 
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Page level plugin JavaScript-->
+<script src="vendor/datatables/jquery.dataTables.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin.min.js"></script>
+<!-- Custom scripts for this page
+-->
+<script src="js/sb-admin-datatables.min.js"></script>
+<script src="vendor/jquery-ui-1.12.1/external/jquery/jquery.js"></script>
+<script src="vendor/jquery-ui-1.12.1/jquery-ui.js"></script>
+<! -- datepicker -->
+<script>
+    $(function () {
+        $('#FORMSUBMIT').on('click',function () {
+            $('#after').submit();
+        });
+    });
+</script>
+
+
 <body class="bg-dark">
   <div class="container">
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form>
+        <form method="post" action="/after_login" id="after">
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
-            <input class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">
+            <input name="email" class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
-            <input class="form-control" id="exampleInputPassword1" type="password" placeholder="Password">
+            <input name="password" class="form-control" id="exampleInputPassword1" type="password" placeholder="Password">
           </div>
           <div class="form-group">
             <div class="form-check">
@@ -36,7 +61,7 @@
                 <input class="form-check-input" type="checkbox"> Remember Password</label>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="index.html">Login</a>
+          <button type="submit" class="btn btn-primary btn-block" id="FORMSUBMIT">Login</button>
         </form>
         <div class="text-center">
           <a class="d-block small mt-3" href="register.html">Register an Account</a>

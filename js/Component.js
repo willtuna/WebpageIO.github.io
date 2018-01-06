@@ -76,6 +76,7 @@ var piethirdUpdate = function (obj_label_data) {
 };
 
 $(document).ready(function () {
+    $('#component_modal').modal({show:true});
     console.log("document ready");
     $.ajax({
         url: "/getComponent",
@@ -108,6 +109,8 @@ $(document).ready(function () {
             send_obj[n['name']] = n['value'];
         });
         console.log(send_obj);
+        $('#TimeRange').text("From "+send_obj.st_year+'-'+send_obj.st_mon+" To "
+        +send_obj.end_year + '-'+ send_obj.end_month);
         $.ajax({
             url: "/getComponent",
             method: "POST",
