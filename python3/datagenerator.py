@@ -3,11 +3,9 @@
 import random
 import datetime
 
-def price_generator():
-    return random.randint(0,50000)
 
 def price_generator():
-    return random.randint(0,50000)
+    return random.randint(0,5000)
 
 def date_generator(i):
     startdate=datetime.date(2015,1,1)
@@ -38,7 +36,7 @@ def data_generator(price,id,date):
             print(in_out[maincat]+','+outcome[secondcat]+',無,'+str(price)+','+str(id)+','+date)
 
 
-for i in range(366):
+for i in range(3650):
     price = price_generator()
     date = date_generator(i)
     data_generator(price,i,date)

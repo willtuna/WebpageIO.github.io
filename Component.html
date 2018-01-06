@@ -8,13 +8,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>記帳小管家</title>
-    <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom fonts for this template-->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin.css" rel="stylesheet">
-    <!-- datepicker -->
+    <link href="css/component.css" rel="stylesheet">
     <link href="vendor/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
 </head>
 
@@ -41,14 +37,14 @@
                     <i class="fa fa-fw fa-area-chart"></i>
                     <span class="nav-link-text">Charts</span>
                 </a>
-                    <ul class="sidenav-second-level collapse" id="collapseComponents">
-                        <li>
-                            <a href="Daily.html">Time Analysis</a>
-                        </li>
-                        <li>
-                            <a href="Component.html">Component Analysis</a>
-                        </li>
-                    </ul>
+                <ul class="sidenav-second-level collapse" id="collapseComponents">
+                    <li>
+                        <a href="Daily.html">Time Analysis</a>
+                    </li>
+                    <li>
+                        <a href="Component.html">Component Analysis</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item" data-toggle="" data-placement="right" title="Tables">
                 <a class="nav-link" href="/getTable">
@@ -147,36 +143,24 @@
             </li>
             <li class="breadcrumb-item active">Charts</li>
         </ol>
-        <!-- Area Chart Example-->
-        <div class="card mb-3">
+
+        <div class="card mb-3" id="divpieChartCard">
             <div class="card-header">
-                <i class="fa fa-area-chart"></i> 直線圖
+                <i class="fa fa-area-chart"></i> 圓餅圖
                 <button type="button" class="btn btn-primary btn-sm btn-circle float-right" data-toggle="modal"
-                        data-target="#dailyModal" style="cursor: pointer;">
+                        data-target="#component_modal" style="cursor: pointer;">
                     <span>&plus;</span>
                 </button>
                 <span class="float-right" style="margin-right: 1rem">設定日期區間</span>
             </div>
             <div class="card-body">
-                <canvas id="dailyLineChart" width="100%" height="30"></canvas>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
-        <div class="card mb-3 " id="divmonthBarCard">
-            <div class="card-header">
-                <i class="fa fa-area-chart"></i> 月收支圖
+                <canvas id="inout_pie" width="100%" height="30"></canvas>
             </div>
             <div class="card-body">
-                <canvas id="monthlyBarChart" width="100%" height="30"></canvas>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
-        <div class="card mb-3" id="divpieChartCard">
-            <div class="card-header">
-                <i class="fa fa-area-chart"></i> 圓餅圖
+                <canvas id="second_pie" width="100%" height="30"></canvas>
             </div>
             <div class="card-body">
-                <canvas id="dailypieChart" width="100%" height="30"></canvas>
+                <canvas id="third_pie" width="100%" height="30"></canvas>
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
@@ -218,39 +202,74 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin.min.js"></script>
     <!-- Custom scripts for this page-->
-    <script src="js/Daily.js"></script>
+    <script src="js/Component.js"></script>
 </div>
-<div class="modal fade " id="dailyModal" tabindex="-1" role="dialog" aria-labelledby="dailyModalLabel"
+<div class="modal fade " id="component_modal" tabindex="-1" role="dialog" aria-labelledby="dailyModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="post" action="/getDaily" id="dailyRangeForm">
+            <form method="POST" action="/getComponent" id="MonthRangeForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dailyModalLabel">新增帳目</h5>
-                    <!-- close botton -->
+                    <h5 class="modal-title" id="dailyModalLabel">日期範圍</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         &times;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- datepicker -->
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label for="datepickerStart"><a class="glyphicon glyphicon-pushpin"></a>起始日期</label>
-                            <input type="text" name="dateStart" id="datepickerStart">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="align-middle" for="start_year">Start Year</label>
+                                <input class="align-middle" id="start_year" type="text" name="st_year" style="width: 5rem;">
+                            </div>
+                            <div class="col-6">
+                                <label for="start_month" class="align-middle">Start Month</label>
+                                <select id="start_month" class="align-middle" type="month" name="st_mon">
+                                    <option value="01">Jan</option>
+                                    <option value="02">Feb</option>
+                                    <option value="03">March</option>
+                                    <option value="04">Apirt</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">Aug</option>
+                                    <option value="09">Sep</option>
+                                    <option value="10">Oct</option>
+                                    <option value="11">Nov</option>
+                                    <option value="12">Dec</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label for="datepickerEnd"><a class="glyphicon glyphicon-pushpin"></a>起始日期</label>
-                            <input type="text" name="dateEnd" id="datepickerEnd">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="align-middle" for="end_year">End Year&nbsp</label>
+                                <input class="align-middle" id="end_year" type="text" name="end_year" style="width: 5rem;">
+                            </div>
+                            <div class="col-6">
+                                <label for="end_month" class="align-middle">End Month&nbsp</label>
+                                <select id="end_month" class="align-middle" type="month" name="end_month">
+                                    <option value="01">Jan</option>
+                                    <option value="02">Feb</option>
+                                    <option value="03">March</option>
+                                    <option value="04">Apirt</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">Aug</option>
+                                    <option value="09">Sep</option>
+                                    <option value="10">Oct</option>
+                                    <option value="11">Nov</option>
+                                    <option value="12">Dec</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-default" data-dismiss="modal" id="dailySubmit">Submit
-                        </button>
-                    </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-default" data-dismiss="modal" id="MonthRangeBotton">Submit
+                    </button>
+                </div>
             </form>
         </div>
     </div>

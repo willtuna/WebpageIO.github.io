@@ -4,16 +4,15 @@ var path = require('path');
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'topscientist',
-    database:'expenditureMNG'
+    host: 'localhost',
+    user: 'root',
+    password: 'topscientist',
+    database: 'expenditureMNG'
 });
 
 
-
 db.connect(function (err) {
-    if(err){
+    if (err) {
         throw err;
     }
     console.log("MySQL connected...")
@@ -31,61 +30,55 @@ app.use(logger);// Should be before route handler
 */
 
 // View Engine
-app.set('view engine','ejs');
-app.set('views',path.join(__dirname,'views'));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // body-parser middle ware
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.urlencoded({extended: false}));
 
 
-
- var users=[
-    { id:1,first_name:'Jeff',  last_name:'Michael',email:'jMicahel@gmail.com',age:30 },
-    { id:2,first_name:'Sara',  last_name:'Michael',email:'sMicahel@gmail.com',age:40 },
-    { id:3,first_name:'Hudson',last_name:'Michael',email:'hMicahel@gmail.com',age:15 } ];
-
-
-
- //*********   set static path for css js vendor folder ***********
+//*********   set static path for css js vendor folder ***********
 /* set static path , this is the express middleware,
  since express.static the directory is relative to the app.js,
  so we add __dirname for good reference
  we then route the public folder to the  ip:port/static
 */
 
-app.use('/vendor',express.static(__dirname+'/vendor'));
-app.use('/js',express.static(__dirname+'/js'));
-app.use('/css',express.static(__dirname+'/css'));
+app.use('/vendor', express.static(__dirname + '/vendor'));
+app.use('/js', express.static(__dirname + '/js'));
+app.use('/css', express.static(__dirname + '/css'));
 // route handler
 
-app.get('/',function (req,res) {
+app.get('/', function (req, res) {
     //res.sendFile(__dirname+'/index.html');
-    res.sendFile(__dirname+'/login.html');
+    res.sendFile(__dirname + '/login.html');
 });
-app.use('/',express.static(__dirname+'/'));
+app.use('/', express.static(__dirname + '/'));
 
 
-app.get('/table',function (req,res) {
-    get_all_table(req,res)
+app.get('/table', function (req, res) {
+    get_all_table(req, res)
 });
 
 //*********  GLOBAL VARIABLE ********************
-var sql,query,post;
-function get_all_table(req,res) {
+var sql, query, post;
+
+function get_all_table(req, res) {
     sql = 'SELECT * FROM rawData ORDER BY ID DESC LIMIT 10';
-    query = db.query(sql, function(err,result){
-        if(err) throw err;
-        res.render('index',{
-            table:result
+    query = db.query(sql, function (err, result) {
+        if (err) throw err;
+        res.render('index', {
+            table: result
         });
     })
 }
-var in_out = ['錯誤','收入','支出']
-var income  = ['錯誤','固定收入','非固定收入']
-var outcome = ['錯誤','飲食', '交通', '娛樂','帳單','醫療','日用','其他']
-var eat     = ['錯誤','飲料','正餐','點心(宵夜)']
-var transport = ['錯誤','高鐵','捷運','公車','客運','加油']
+
+var in_out = ['錯誤', '收入', '支出'];
+var income = ['錯誤', '固定收入', '非固定收入'];
+var outcome = ['錯誤', '飲食', '交通', '娛樂', '帳單', '醫療', '日用', '其他'];
+var eat = ['錯誤', '飲料', '正餐', '點心(宵夜)'];
+var transport = ['錯誤', '高鐵', '捷運', '公車', '客運', '加油'];
 var tmpdate;
 
 function dateconvert(date) {
@@ -96,105 +89,271 @@ function dateconvert(date) {
 
 
 //*************** post handler for FORM *******************
-app.post('/addBill', function (req,res) {
+app.post('/addBill', function (req, res) {
     console.log('FORM SUBMITTED');
     tmpdate = dateconvert(req.body.date);
 
-    var newBill={
-        date:tmpdate,
-        maincategory:req.body.maincategory,
-        seccategory:req.body.seccategory,
-        thirdcategory:req.body.thirdcategory,
-        price:req.body.price,
-        item_name:req.body.item_name
+    var newBill = {
+        date: tmpdate,
+        maincategory: req.body.maincategory,
+        seccategory: req.body.seccategory,
+        thirdcategory: req.body.thirdcategory,
+        price: req.body.price,
+        item_name: req.body.item_name
     };
 
-    if(newBill.maincategory == '1'){
-       newBill.maincategory = in_out[1];
-       newBill.seccategory  = income[newBill.seccategory];
-       newBill.thirdcategory = '無';
+    if (newBill.maincategory == '1') {
+        newBill.maincategory = in_out[1];
+        newBill.seccategory = income[newBill.seccategory];
+        newBill.thirdcategory = '無';
     }
-    else if(newBill.maincategory == '2'){
-        if( newBill.seccategory == '1'){
+    else if (newBill.maincategory == '2') {
+        if (newBill.seccategory == '1') {
             newBill.maincategory = in_out[2];
-            newBill.seccategory  = outcome[newBill.seccategory];
+            newBill.seccategory = outcome[newBill.seccategory];
             newBill.thirdcategory = eat[newBill.thirdcategory];
         }
-        else if(newBill.seccategory == '2'){
+        else if (newBill.seccategory == '2') {
             newBill.maincategory = in_out[2];
-            newBill.seccategory  = outcome[newBill.seccategory];
+            newBill.seccategory = outcome[newBill.seccategory];
             newBill.thirdcategory = transport[newBill.thirdcategory];
         }
         else {
             newBill.maincategory = in_out[2];
-            newBill.seccategory  = outcome[newBill.seccategory];
+            newBill.seccategory = outcome[newBill.seccategory];
             newBill.thirdcategory = '無';
         }
     }
 
-        post = newBill;
-        sql = 'INSERT INTO rawData SET ?';
-        query = db.query(sql, post, function (err,result) {
-            if(err) throw  err;
-            get_all_table(req,res);
-            });
- });
+    post = newBill;
+    sql = 'INSERT INTO rawData SET ?';
+    query = db.query(sql, post, function (err) {
+        if (err) throw  err;
+        get_all_table(req, res);
+    });
+});
 
 
-app.get('/getTable', function (req,res) {
-    sql = 'SELECT * FROM rawData'
-    query = db.query(sql, function(err,result){
-        if(err) throw err;
-        res.render('index',{
-            table:result
+app.get('/getTable', function (req, res) {
+    sql = 'SELECT * FROM rawData';
+    query = db.query(sql, function (err, result) {
+        if (err) throw err;
+        res.render('index', {
+            table: result
         });
     })
 });
 
-app.listen(8000,function () {
-    console.log('Server Starting on port 8000...');
+
+app.all('/getRecent', function (req, res) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    sql = ' SELECT * FROM rawData WHERE maincategory = "支出" AND date >= "' +
+        yyyy+'-'+mm+'-'+'01'+
+        '" AND date <= "'+
+        yyyy+'-'+mm+'-'+"31"+ '"' ;
+
+    console.log(sql);
+
+    query = db.query(sql, function (err, rows, fields) {
+        var date_arr = [], price_arr = [] ;
+        if (err) throw err;
+        var outcome_acc = 0;
+        for (var i = rows.length - 1; i >= 0; i--) {
+            if(rows[i].maincategory === '支出'){
+                outcome_acc += parseInt(rows[i].price);
+                date_arr.push(rows[i].date);
+                price_arr.push(rows[i].price);
+            }
+        }
+
+        res.json(
+            {
+                date: date_arr,
+                price: price_arr,
+                outcome_acc:outcome_acc
+            });
+
+    });
 });
-
-
-app.get('/getDaily', function (req,res) {
+app.all('/getDaily', function (req, res) {
     var start_date = req.body.dateStart;
-    var end_date   = req.body.dateEnd;
-    var i;
-    //   start_date = '2015-01-01';
-    //  end_date = '2015-05-01';
-    if( (start_date == undefined) || (end_date == undefined)) {
+    var end_date = req.body.dateEnd;
+    if ((start_date === undefined) || (end_date === undefined)) {
         console.log('IN DEFAULT DAILY');
-        sql = ' SELECT * FROM rawData ORDER BY ID DESC LIMIT 7 ' ;
-        query = db.query(sql, function(err,rows,fields){
-            if(err) throw err;
-            var date_arr = [], price_arr = [];
+        sql = ' SELECT * FROM rawData ORDER BY ID DESC LIMIT 7 ';
+        query = db.query(sql, function (err, rows, fields) {
+            var date_arr = [], price_arr = [], maincategory_arr = [];
+            if (err) throw err;
             var i;
-            for(i=0 ; i < rows.length ; i++){
+            for (i = rows.length - 1; i >= 0; i--) {
+                maincategory_arr.push(rows[i].maincategory);
                 date_arr.push(rows[i].date);
                 price_arr.push(rows[i].price);
             }
 
-            res.json( {date:date_arr,price:price_arr} );
+            res.json(
+                {
+                    date: date_arr,
+                    price: price_arr,
+                    maincategory: maincategory_arr,
+                    month_label: month_label_arr,
+                    month_income_price: month_income_price_arr,
+                    month_outcome_price: month_outcomme_price_arr
+                });
 
         })
     }
     else {
-        console.log('FETCH FROM',start_date,'TO',end_date);
+        start_date = start_date.split("/");
+        end_date = end_date.split("/");
+
+        var start_year = parseInt(start_date[2]);
+        var end_year = parseInt(end_date[2]);
+        var start_mon = parseInt(start_date[0]);
+        var end_mon = parseInt(end_date[0]);
+        end_mon = (end_year - start_year) * 12 + end_mon;
+        var month_label_arr = [], month_income_price_arr = [], month_outcomme_price_arr = [];
+        var tmpmon;
+        for (var j = start_mon; j <= end_mon; j++) {
+            if (j % 12 < 10 && (j != 12)) {
+                tmpmon = '0' + (j % 12).toString();
+            } else {
+                if(j%12==0){
+                    tmpmon = '12';
+                }else{
+                    tmpmon = (j % 12).toString();
+                }
+            }
+
+            sql =
+                " SELECT SUM(PRICE) FROM `rawData` WHERE  maincategory = '收入' AND date LIKE '" +
+                start_year.toString() + "-" + tmpmon + "-%'";
+
+            month_label_arr.push(start_year.toString() + "-" + tmpmon);
+
+            query = db.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                month_income_price_arr.push(rows[0]['SUM(PRICE)']);
+            });
+
+
+            sql =
+                " SELECT SUM(PRICE) FROM `rawData` WHERE  maincategory = '支出' AND date LIKE '" +
+                start_year.toString() + "-" + tmpmon + "-%'";
+
+            query = db.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                month_outcomme_price_arr.push(rows[0]['SUM(PRICE)']);
+            });
+
+            if (j % 12 == 0) {
+                start_year++;
+            }
+        }
+
+
+        start_date = start_date[2] + '-' + start_date[0] + '-' + start_date[1];
+        end_date = end_date[2] + '-' + end_date[0] + '-' + end_date[1];
         sql =
             " SELECT * FROM `rawData` WHERE date >=  '" + start_date + "' AND date <= '" +
-            end_date +"'";
+            end_date + "'";
 
-        query = db.query(sql, function(err,rows,fields){
-            if(err) throw err;
-            var date_arr = [], price_arr = [];
+        query = db.query(sql, function (err, rows, fields) {
+            if (err) throw err;
             var i;
-            for(i=0 ; i < rows.length ; i++){
+            var date_arr = [], price_arr = [], maincategory_arr = [];
+            //console.log(sql);
+            for (i = 0; i < rows.length; i++) {
+                maincategory_arr.push(rows[i].maincategory);
                 date_arr.push(rows[i].date);
                 price_arr.push(rows[i].price);
             }
 
-            res.json( {date:date_arr,price:price_arr} );
-
+            res.json(
+                {
+                    date: date_arr,
+                    price: price_arr,
+                    maincategory: maincategory_arr,
+                    month_label: month_label_arr,
+                    month_income_price: month_income_price_arr,
+                    month_outcome_price: month_outcomme_price_arr
+                });
         })
     }
+});
+app.all('/getComponent', function (req, res) {
+    //console.log(req);
+    if (Object.keys(req.body).length == 0) {
+        console.log("NO DATA FETCH");
+    }
+    else {
+        var start_mon = parseInt(req.body.st_mon);
+        var start_year = parseInt(req.body.st_year);
+        var end_mon = parseInt(req.body.end_month);
+        var end_year = parseInt(req.body.end_year);
+        var start_date = req.body.st_year + '-' + req.body.st_mon + '-00';
+        var end_date = req.body.end_year + '-' + req.body.end_month + '-31';
+
+        sql =
+            " SELECT * FROM `rawData` WHERE date >=  '" + start_date + "' AND date <= '" +
+            end_date + "'";
+
+        query = db.query(sql, function (err, rows, fields) {
+            if (err) throw err;
+            var i;
+            var income_sum_val = 0;
+            var outcome_sum_val = 0;
+            var outcome_obj = ['飲食', '交通', '娛樂', '帳單', '醫療', '日用', '其他'];
+            var outcome_val = [0, 0, 0, 0, 0, 0, 0];
+            var eat_obj = ['飲料', '正餐', '點心(宵夜)'];
+            var eat_val = [0, 0, 0];
+
+            rows.forEach(function (value, index) {
+                if (value.maincategory === '收入') {
+                    income_sum_val += parseInt(value.price);
+                } else if (value.maincategory === '支出') {
+                    outcome_sum_val += parseInt(value.price);
+                    var index_of_second = outcome_obj.indexOf(value.seccategory);
+                    if (index_of_second !== -1) {
+                        outcome_val[index_of_second] += parseInt(value.price);
+                        if (index_of_second === 0) {
+                            var index_of_third = eat_obj.indexOf(value.thirdcategory);
+                            eat_val[index_of_third] += parseInt(value.price);
+                        } else {
+                            console.log("Dirty Data");
+                        }
+                    } else {
+                        console.log("Dirty Data");
+                    }
+                } else {
+                    console.log("Dirty Data");
+                }
+            });
+            console.log(income_sum_val)
+            res.json(
+                {
+                    inout_label: ['收入', '支出'],
+                    inout_data: [income_sum_val, outcome_sum_val],
+                    second_label: ['飲食', '交通', '娛樂', '帳單', '醫療', '日用', '其他'],
+                    second_data: outcome_val,
+                    third_label: ['飲料', '正餐', '點心(宵夜)'],
+                    third_data: eat_val
+                });
+        })
+    }
+});
+app.listen(8000, function () {
+    console.log('Server Starting on port 8000...');
 });
