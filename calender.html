@@ -15,7 +15,7 @@
     <!-- Page level plugin CSS-->
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="css/sb-calendar.css" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -152,21 +152,111 @@
         </ol>
         <!-- Icon Cards-->
         <div class="row">
-            <div class="col-xl-3 col-sm-6 mb-3">
-                <! --
+            <div class="col-xl-8 col-sm-8 mb-3">
+                
 
 
-                 這邊是主畫面
+                 <p id="month_sel">	
+		         <button class="button button1" onclick="last_month()"> << </button>
+		         <button class="button button2" onclick="next_month()"> >> </button>
+	             </p>
+	
+		
+		
+	             <div id="canvas">
+		
+     	         <canvas id="canvas-module1" width="500" height="580" ></canvas>
+				 
+				 </div>
+		     </div>       
+			<!--
+			<div class="col-xl-4 col-sm-6">
+			    <select name="month">
+                     <option selected>Open this select menu</option>
+                     <option value="JANUARY">JAN</option>
+                     <option value="FEBRUARY">FEB</option>
+                     <option value="MARCH">MAR</option>
+					 <option value="APRIL">APR</option>
+					 <option value="MAY">MAY</option>
+                     <option value="JUNE">JUN</option>
+                     <option value="JULY">JUL</option>
+					 <option value="AUGUST">AUG</option>
+					 <option value="SEPTEMBER">SEP</option>
+					 <option value="OCTOBER">OCT</option>
+					 <option value="NOVEMBER">NOV</option>
+					 <option value="DECEMBER">DEC</option>
+				</select>	
+            </div>
+			-->
+			
+			<form class="col-xl-3 col-sm-4" action="get_date" id="todolist">
+				<label for="example-text-input" class="col-2 col-form-label">Text</label>
+				
+				<div class="col-10">
+					<input class="form-control" type="text" value="Input" id="example-text-input" name="text">
+				</div>
+				
+				<label for="example-year" class="col-2 col-form-label">Year</label>
+				
+				<div class="col-10">
+					<input class="form-control" type="year" value="2018" id="example-year-input" name="year">
+				</div>
+				
+				<label for="example-month" class="col-2 col-form-label">Month</label>
+				
+				<div class="col-8">
+					<select class="form-control" name="month">
+						
+						<option value="JANUARY">JAN</option>
+						<option value="FEBRUARY">FEB</option>
+						<option value="MARCH">MAR</option>
+						<option value="APRIL">APR</option>
+						<option value="MAY">MAY</option>
+						<option value="JUNE">JUN</option>
+						<option value="JULY">JUL</option>
+						<option value="AUGUST">AUG</option>
+						<option value="SEPTEMBER">SEP</option>
+						<option value="OCTOBER">OCT</option>
+						<option value="NOVEMBER">NOV</option>
+						<option value="DECEMBER">DEC</option>
+					</select>	
+				</div>
+				
+				<label for="example-day" class="col-2 col-form-label">Day</label>
+				
+				<div class="col-10">
+					<input class="form-control" value="1" id="example-day-input" name="day">
+				</div>
+				
+				<label for="example-color-input" class="col-2 col-form-label" name="color" >Color</label>
+				
+				<div class="col-10">
+					
+					<select class="form-control" name="color">
+						
+						<option value="#563d7c">RED</option>
+						<option value="#563d7c">BLUE</option>
+					
+					</select>
+					
+				</div>
+				
+				<label class="col-2 col-form-label"></label>
+				
+				<div class="col-10">
+					<button type="submit" class="btn btn-primary" id="submit" >Submit</button>
+				</div>
+				
+			
+			</form>
+		
 
-
-
-
-
-                -->
-                <a class="scroll-to-top rounded" href="#page-top">
+			
+                
+				<a class="scroll-to-top rounded" href="#page-top">
                     <i class="fa fa-angle-up"></i>
                 </a>
-            </div>
+            
                 <!-- Logout Modal-->
         </div>
     </div>
@@ -201,7 +291,7 @@
 <script src="vendor/datatables/jquery.dataTables.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin.min.js"></script>
+<script src="js/sb-calendar.js"></script>
 <!-- Custom scripts for this page
 <script src="js/sb-admin-datatables.min.js"></script>
 -->
