@@ -220,6 +220,7 @@ function draw_color(get_day,get_month,get_year,get_color) {
 	else{
 		tran_mon= mon_true[(mon-1)%12];
 	}
+	var length = get_year.length;
 	for(scan=0;scan<length;++scan){
 		
 		if(get_year[scan]==year && get_month[scan]==tran_mon){	
@@ -290,9 +291,10 @@ function draw_todolist(get_day,get_month,get_year,get_color,get_text) {
 							
 							console.log(m);
 				}
-	
-	
-	for(scan=0;scan<length;++scan){
+
+
+    var length = get_year.length;
+	for(scan=length-1;scan >=0;scan--){
 		 
 			
 		
@@ -363,7 +365,7 @@ $(document).ready(function () {
                 var month = response.month;
                 var year = response.year;
                 var note = response.note;
-                drawmod1();
+                //drawmod1();
                 draw_color(day, month, year, color);
                 draw_todolist(day, month, year, color, note);
             }
