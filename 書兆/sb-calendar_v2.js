@@ -46,6 +46,8 @@
 
 var mod1 = document.getElementById("canvas-module1"); // get width & height from canvas
 var ctx1 = mod1.getContext("2d");
+var mod2 = document.getElementById("canvas-module2"); // get width & height from canvas
+var ctx2 = mod2.getContext("2d");
 
 var month=['JANUARY','FEBURARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBOR','NOVEMBER','DECEMBER']
 var week = ['SUN','MON','TUE','WED','THU','FRI','SAT']; 
@@ -54,12 +56,12 @@ var year=2018;
 var mon=1;
 var mon_tot=[31,28,31,30,31,30,31,31,30,31,30,31];
 
-var get_day=[2,5,6,15,30];
-var get_month=[1,1,2,3,4];
-var get_year=[2018,2018,2018,2018,2018];
-var get_color=["#FF0000","#0080FF","#563d7c","#563d7c","#563d7c"];
-var length=5;
-
+var get_day=[2,5,6,15,30,15,23,27,29,3,6,8,10,24,25,17];
+var get_month=[1,1,1,1,1,1,1,3,3,3,3,3,3,3,2,2];
+var get_year=[2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018,2018];
+var get_color=["#FF0000","#0080FF","#563d7c","#563d7c","#563d7c","#0080FF","#0080FF","#FF0000","#FF0000","#563d7c","#563d7c","#563d7c","#0080FF","#0080FF","#FF0000","#FF0000"];
+var length=16;
+var get_text=["I am first ", "Hello","What the fuck.","I need to go to the bookstore at 3pm.","HaHA","I need to go to the bookstore at 3pm.","I need to go to the bookstore at 3pm.","I need to go to the bookstore at 3pm.","I need to go to the bookstore at 3pm.","HaHA","HaHA","HaHA","HaHA","HaHA","HaHA","HaHA"];
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +72,10 @@ drawmod1();
 
 draw_color(get_day,get_month,get_year,get_color);
 
+draw_todolist(get_day,get_month,get_year,get_color,get_text);
 
+
+	
 function mon_first(year,mon) {
     var mon_day=[0,3,3,6,1,4,6,2,5,0,3,5];
 	
@@ -84,19 +89,21 @@ function mon_first(year,mon) {
 	return temp;
 }
 
-
 function last_month() {
     ctx1.clearRect(0, 0, mod1.width, mod1.height);
+	ctx2.clearRect(0, 0, mod2.width, mod2.height);
 	if(((mon-1)%12)==0){
 	year=year-1;
 	}
 	mon = mon-1;
 	drawmod1();
 	draw_color(get_day,get_month,get_year,get_color);
+	draw_todolist(get_day,get_month,get_year,get_color,get_text);
 }
 
 function next_month() {
     ctx1.clearRect(0, 0, mod1.width, mod1.height);
+	ctx2.clearRect(0, 0, mod2.width, mod2.height);
 	if(((mon%12)==0)){
 	year =year+1;	
 	mon = mon+1;
@@ -105,6 +112,7 @@ function next_month() {
 	mon = mon+1;
 	drawmod1();
 	draw_color(get_day,get_month,get_year,get_color);
+	draw_todolist(get_day,get_month,get_year,get_color,get_text);
 	
 }
 
@@ -117,10 +125,14 @@ function drawmod1() {
 		
 	//ctx.font = "180px  Arial"; ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillText(mod1_cell[3*choose_month],75,390);  // month in the middle
 	if(mon<1){
-		ctx1.font = "60px  Arial"; ctx1.fillStyle = "rgba(0,100,100,0.5)"; ctx1.fillText(month[12-Math.abs(mon%12)-1],500-(ctx1.measureText(month[12-Math.abs(mon%12)-1]).width)-20,550);
+		ctx1.font = "60px  Arial"; 
+		ctx1.fillStyle = "rgba(0,100,100,0.5)"; 
+		ctx1.fillText(month[12-Math.abs(mon%12)-1],500-(ctx1.measureText(month[12-Math.abs(mon%12)-1]).width)-20,550);
 	}
 	else{
-		ctx1.font = "60px  Arial"; ctx1.fillStyle = "rgba(0,100,100,0.5)"; ctx1.fillText(month[(mon-1)%12],500-(ctx1.measureText(month[(mon-1)%12]).width)-20,550);  // month at the coner
+		ctx1.font = "60px  Arial"; 
+		ctx1.fillStyle = "rgba(0,100,100,0.5)"; 
+		ctx1.fillText(month[(mon-1)%12],500-(ctx1.measureText(month[(mon-1)%12]).width)-20,550);  // month at the coner
 	}   
 	k=1;
 	  for(var j=1;j<7;++j){
@@ -184,8 +196,6 @@ function drawmod1() {
 		
 }	
 
-
-
 function draw_color(get_day,get_month,get_year,get_color) {
 	var tran_mon=0;
 	var mon_true=[1,2,3,4,5,6,7,8,9,10,11,12];
@@ -234,6 +244,66 @@ function draw_color(get_day,get_month,get_year,get_color) {
 	}
 }	
 
+function draw_todolist(get_day,get_month,get_year,get_color,get_text) {
+	var count=0;
+	var tran_mon=0;
+	var mon_true=[1,2,3,4,5,6,7,8,9,10,11,12];
+	if(mon<1){
+		tran_mon= mon_true[12-Math.abs(mon%12)-1];
+	}
+	else{
+		tran_mon= mon_true[(mon-1)%12];
+	}	
+	
+	var m=1;
+				for(var j=0;j<12;++j){
+							
+							if(j>5){
+							ctx2.beginPath();
+							ctx2.rect(510, 10+(j-6)*90, 480, 70); 
+							ctx2.fillStyle = "rgba(255, 255, 255, 0.05)";
+							ctx2.fill(); 						
+							}
+							else{
+							ctx2.beginPath();
+							ctx2.rect(10, 10+j*90, 480, 70); 
+							ctx2.fillStyle = "rgba(255, 255, 255, 0.05)";
+							ctx2.fill(); 
+							}
+							
+							m++;
+							
+							console.log(m);
+				}
+	
+	
+	for(scan=0;scan<length;++scan){
+		 
+			
+		
+				
+			if(get_year[scan]==year && get_month[scan]==tran_mon){	
+				
+				
+					if(count>5){
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = 'rgba(255,255, 255, 0.8)'; ctx2.fillText(get_year[scan]+'/'+get_month[scan]+'/'+get_day[scan],520,50+(count-6)*90);
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = get_color[scan]; ctx2.fillText('▼',620,50+(count-6)*90);	
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = 'black'; ctx2.fillText(get_text[scan],650,50+(count-6)*90);	
+					count=++count;
+					}
+					else{
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = 'rgba(255,255, 255, 0.8)'; ctx2.fillText(get_year[scan]+'/'+get_month[scan]+'/'+get_day[scan],20,50+count*90);
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = get_color[scan]; ctx2.fillText('▼',120,50+count*90);	
+					ctx2.font = "20px  Arial";  ctx2.fillStyle = 'black'; ctx2.fillText(get_text[scan],150,50+count*90);		
+					count=++count;
+					}		
+					
+		    }
+            			
+	}
+	
+}
+
 $(document).ready(function () {
 
         $.ajax({
@@ -246,8 +316,9 @@ $(document).ready(function () {
 				var day = response.day;
 				var month = response.month;
 				var year = response.year;
+				var note = response.note;
 				draw_color(day,month,year,color);
-				
+				draw_todolist(day,month,year,color,note);
 				
             }
         });
@@ -270,8 +341,9 @@ $(document).ready(function () {
 				var day = response.day;
 				var month = response.month;
 				var year = response.year;
+				var note = response.note;
 				draw_color(day,month,year,color);
-				
+				draw_todolist(day,month,year,color,note);
 				
             }
         });

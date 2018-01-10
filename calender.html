@@ -29,13 +29,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+            <li class="nav-item" data-toggle="" data-placement="right" title="Dashboard">
                 <a class="nav-link" href="index.html">
                     <i class="fa fa-fw fa-dashboard"></i>
                     <span class="nav-link-text">Brief Report</span>
                 </a>
             </li>
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
+            <li class="nav-item" data-toggle="" data-placement="right" title="Charts">
                 <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"
                    data-parent="#exampleAccordion">
                     <i class="fa fa-fw fa-area-chart"></i>
@@ -50,7 +50,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <li class="nav-item" data-toggle="" data-placement="right" title="Tables">
                 <a class="nav-link" href="/getTable">
                     <i class="fa fa-fw fa-table"></i>
                     <span class="nav-link-text">Table</span>
@@ -110,7 +110,9 @@
      	         <canvas id="canvas-module1" width="500" height="580" ></canvas>
 				 
 				 </div>
-		     </div>       
+		     </div>  
+			
+			     			 
 			<!--
 			<div class="col-xl-4 col-sm-6">
 			    <select name="month">
@@ -131,7 +133,7 @@
             </div>
 			-->
 			
-			<form class="col-xl-3 col-sm-4" action="get_date" id="todolist">
+			<form method="post" class="col-xl-3 col-sm-4" action="get_date" id="todolist">
 				<label for="example-text-input" class="col-2 col-form-label">Text</label>
 				
 				<div class="col-10">
@@ -149,18 +151,18 @@
 				<div class="col-8">
 					<select class="form-control" name="month">
 						
-						<option value="JANUARY">JAN</option>
-						<option value="FEBRUARY">FEB</option>
-						<option value="MARCH">MAR</option>
-						<option value="APRIL">APR</option>
-						<option value="MAY">MAY</option>
-						<option value="JUNE">JUN</option>
-						<option value="JULY">JUL</option>
-						<option value="AUGUST">AUG</option>
-						<option value="SEPTEMBER">SEP</option>
-						<option value="OCTOBER">OCT</option>
-						<option value="NOVEMBER">NOV</option>
-						<option value="DECEMBER">DEC</option>
+						<option value=1>JAN</option>
+						<option value=2>FEB</option>
+						<option value=3>MAR</option>
+						<option value=4>APR</option>
+						<option value=5>MAY</option>
+						<option value=6>JUN</option>
+						<option value=7>JUL</option>
+						<option value=8>AUG</option>
+						<option value=9>SEP</option>
+						<option value=10>OCT</option>
+						<option value=11>NOV</option>
+						<option value=12>DEC</option>
 					</select>	
 				</div>
 				
@@ -176,9 +178,9 @@
 					
 					<select class="form-control" name="color">
 						
-						<option value="#563d7c">RED</option>
-						<option value="#563d7c">BLUE</option>
-					
+						<option value="#FF0d0c">RED</option>
+                        <option value="#0080FF">BLUE</option>
+
 					</select>
 					
 				</div>
@@ -192,7 +194,15 @@
 			
 			</form>
 		
-
+            
+			<div class="col-xl-12 col-sm-8 mb-3">
+						
+							<div id="canvas2">
+					
+							<canvas id="canvas-module2" width="1000" height="580" ></canvas>
+							
+							</div>
+			</div>  
 			
                 
 				<a class="scroll-to-top rounded" href="#page-top">
@@ -229,15 +239,13 @@
 <!-- Core plugin JavaScript-->
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 <!-- Page level plugin JavaScript-->
-<script src="vendor/chart.js/Chart.min.js"></script>
 <script src="vendor/datatables/jquery.dataTables.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 <!-- Custom scripts for all pages-->
-<script src="js/sb-calendar.js"></script>
+<script src="js/sb-calendar_v2.js"></script>
 <!-- Custom scripts for this page
 <script src="js/sb-admin-datatables.min.js"></script>
 -->
-<script src="js/sb-admin-charts.min.js"></script>
 </body>
 
 </html>
