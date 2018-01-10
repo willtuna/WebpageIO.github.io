@@ -276,11 +276,29 @@ app.post('/addBill', function (req, res) {
     });
 });
 
+app.post('/TableRange', function (req, res) {
+    var table = req.cookies.name + "record";
+
+    console.log('FORM SUBMITTED TABLE RANGE');
+    var tmpdate1 = dateconvert(req.body.datefrom);
+    var tmpdate2 = dateconvert(req.body.dateto);
+
+    sql = 'SELECT * FROM ' + table +' WHERE date >= "'+ tmpdate1 + '" AND date <= "' +
+        tmpdate2 + '" ORDER BY date DESC';
+    console.log(sql);
+    query = db.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log(result);
+        res.render('index', {
+            table: result
+        });
+    })
+});
 
 
 app.get('/getTable', function (req, res) {
     var table = req.cookies.name + 'record';
-    sql = 'SELECT * FROM '+ table;
+    sql = 'SELECT * FROM '+ table +" ORDER BY date DESC";
     query = db.query(sql, function (err, result) {
         console.log(result);
         if (err) throw err;
@@ -304,17 +322,14 @@ app.all('/getRecent', function (req, res) {
     if (dd < 10) {
         dd = '0' + dd;
     }
-
     if (mm < 10) {
         mm = '0' + mm;
     }
-
 
     sql = ' SELECT * FROM '+table+' WHERE maincategory = "支出" AND date >= "' +
         yyyy+'-'+mm+'-'+'01'+
         '" AND date <= "'+
         yyyy+'-'+mm+'-'+dd+ '" ORDER BY date' ;
-
     console.log(sql);
     query = db.query(sql, function (err, rows, fields) {
         if (err) throw err;
