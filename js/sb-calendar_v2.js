@@ -294,7 +294,7 @@ function draw_todolist(get_day,get_month,get_year,get_color,get_text) {
 
 
     var length = get_year.length;
-	for(scan=length-1;scan >=0;scan--){
+	for(scan=0;scan < length;scan++){
 		 
 			
 		
@@ -339,6 +339,7 @@ $(document).ready(function () {
             var note = response.note;
             console.log("INITIAL GET:", response);
             drawmod1();
+            ctx2.clearRect(0, 0, mod2.width, mod2.height);
             draw_color(day, month, year, color);
             draw_todolist(day, month, year, color, note);
         }
@@ -366,6 +367,7 @@ $(document).ready(function () {
                 var year = response.year;
                 var note = response.note;
                 //drawmod1();
+                ctx2.clearRect(0, 0, mod2.width, mod2.height);
                 draw_color(day, month, year, color);
                 draw_todolist(day, month, year, color, note);
             }
